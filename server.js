@@ -12,7 +12,7 @@ import mongoose from "mongoose";
 
 // app config
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 // middleware
 app.use(express.json());
@@ -23,18 +23,44 @@ app.use(
 );
 
 //db connection
-let dbConnection = null;
-try {
-  dbConnection = await connectDB();
-  console.log("DB Connected");
-} catch (error) {
-  console.error("Database connection error:", error);
-}
+// let dbConnection = null;
+// try {
+//   dbConnection = await connectDB();
+//   console.log("DB Connected");
+// } catch (error) {
+//   console.error("Database connection error:", error);
+// }
 
 // // Descope client setup
 // const descopeClient = DescopeClient({
 //   projectId: "P2uAdkoJmtbNNqL0EN7we3djMjV6",
 // });
+
+let isconnected = false;
+async function connectToMongoDB() {
+  try{
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    isconnected = true;
+    console.log("Connected to MongoDB");
+    
+  }
+  catch(error){
+    console.error("Error connecting to MongoDB:", error);
+  }
+}
+
+//add middleware
+app.use((req, res, next) => {
+  if (!isconnected) {
+    connectToMongoDB()
+    }
+  next();
+});
+  
+
 
 //api endpoints
 app.use("/api/service", serviceRouter);
@@ -113,6 +139,11 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Server Started on http://localhost:${port}`);
-});
+// Only listen locally, not on Vercel
+if (process.env.NODE_ENV !== "production") {
+  app.listen(port, () => {
+    console.log(`Server Started on http://localhost:${port}`);
+  });
+}
+
+module.exports = app;
