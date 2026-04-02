@@ -12,7 +12,7 @@ import mongoose from "mongoose";
 
 // app config
 const app = express();
-const port = process.env.PORT || 4000;
+const port = 4000;
 
 // middleware
 app.use(express.json());
@@ -69,6 +69,9 @@ app.use("/images", express.static("uploads"));
 app.use("/api/cart", cartRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/auth", authRouter);
+
+//do not use app.listen() invercel
+module.exports = app;
 
 // Enhanced health check endpoint
 app.get("/api/health-check", async (req, res) => {
@@ -139,11 +142,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Only listen locally, not on Vercel
-if (process.env.NODE_ENV !== "production") {
-  app.listen(port, () => {
-    console.log(`Server Started on http://localhost:${port}`);
-  });
-}
-
-module.exports = app;
+app.listen(port, () => {
+  console.log(`Server Started on http://localhost:${port}`);
+});
