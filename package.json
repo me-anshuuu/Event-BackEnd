@@ -1,0 +1,38 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "server": "nodemon server.js",
+    "start": "node server.js",
+    "repair-db": "node --experimental-modules repair-db.js",
+    "reset-indexes": "node --experimental-modules reset-db-indexes.js",
+    "fix-users": "node --experimental-modules fix-duplicate-users.js",
+    "rebuild-users": "node --experimental-modules rebuild-users-collection.js",
+    "direct-fix": "node --experimental-modules direct-fix-registration.js",
+    "fix-phone": "node --experimental-modules fix-phone-index.js",
+    "restart-fixed": "node --experimental-modules restart-with-fixes.js",
+    "start-safe": "node --experimental-modules start-with-repair.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "cores": "^0.8.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "mongose": "^0.0.2-security",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.10.0",
+    "nodemon": "^3.1.9",
+    "razorpay": "^2.9.5",
+    "stripe": "^17.5.0",
+    "validator": "^13.12.0"
+  }
+}
